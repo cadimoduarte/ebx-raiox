@@ -14,7 +14,7 @@ function mk(app,search,hash){
   ctx.g=g;ctx.act=async(a,v,extra)=>{H.click({target:{closest:()=>({disabled:false,getAttribute:k=>k==='data-act'?a:(extra&&extra[k])||v})}});await new Promise(r=>setTimeout(r,30))};
   ctx.html=()=>el('view').innerHTML;return ctx}
 const wait=()=>new Promise(r=>setTimeout(r,40));
-function chk(n,h){if(/undefined|NaN|\[object/.test(h))falhas++;console.log('FALHA',n,h.match(/.{50}(undefined|NaN|\[object).{50}/)[0]);if(!h){falhas++;console.log('VAZIA',n)}}
+function chk(n,h){if(/undefined|NaN|\[object/.test(h)){falhas++;console.log('FALHA',n,(h.match(/.{0,50}(undefined|NaN|\[object).{0,50}/)||[''])[0])}if(!h){falhas++;console.log('VAZIA',n)}}
 (async()=>{
   const all=async tag=>{for(const [a,s,h] of [['hub'],['entrevista'],['relatorio'],['portal','','#dados'],['portal','','#raiox'],['portal','','#plano'],['portal','','#time'],['checkin'],['gestor'],['email','?de=ceo'],['email','?de=bp'],['email','?de=rh'],['mensagens','?de=bp'],['mensagens','?de=gestor'],['console']]){const c=mk(a,s,h);await wait();chk(tag+':'+a+(s||'')+(h||''),c.html())}};
   await all('vazio');
