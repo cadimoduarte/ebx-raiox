@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personas e canais do Raio-X</title>
+<style>
+/* Identidade do ERP EBX (src/colors.css): neutros quentes, primário em tinta, cores por domínio.
+   Layout: seletor de persona no topo; ficha da persona ao lado do protótipo do canal; matriz no fim */
+:root{
+  --ebx-pessoas:#2f80ed; --ebx-cargos:#9b51e0; --ebx-folha:#27ae60; --ebx-gestao:#f2994a;
+  --ebx-insights:#0f9fb5; --ebx-hrbp:#c2569b; --ebx-alerta:#e0b400; --ebx-critico:#d64545; --ebx-ok:#1f9d55;
+  --bg:#f6f6f4; --panel:#ffffff; --surface-2:#f0f0ed; --ink:#1c1c1a; --muted:#6b6a66; --line:#e4e3df; --line-strong:#8c8a84;
+  --accent:#1c1c1a; --accent-soft:#f0f0ed; --signal:#7a6200; --signal-soft:#fbf3cf;
+  --agent-soft:#f8eaf2; --user:#f0f0ed; --ok:#1f9d55; --stop:#d64545;
+  --display:system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121211; --panel:#1a1a19; --surface-2:#232321; --ink:#f0efec; --muted:#a3a29c; --line:#2e2e2b; --line-strong:#7a7973;
+    --accent:#f0efec; --accent-soft:#232321; --signal:#e0b400; --signal-soft:#332b0a;
+    --agent-soft:#33202b; --user:#232321; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121211; --panel:#1a1a19; --surface-2:#232321; --ink:#f0efec; --muted:#a3a29c; --line:#2e2e2b; --line-strong:#7a7973;
+  --accent:#f0efec; --accent-soft:#232321; --signal:#e0b400; --signal-soft:#332b0a;
+  --agent-soft:#33202b; --user:#232321; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--body)}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:14px}
+.logo{background:var(--ink);color:var(--bg);padding:2px 8px;border-radius:6px;letter-spacing:.08em}
+main{max-width:1040px;margin:0 auto;padding:28px 16px 56px;display:flex;flex-direction:column;gap:28px}
+h1{font:700 26px/1.2 var(--display);margin:0 0 8px;text-wrap:balance}
+h2{font:700 20px/1.2 var(--display);margin:0 0 10px;text-wrap:balance}
+h3{font:600 15px/1.3 var(--body);margin:0 0 4px}
+p{margin:0;max-width:65ch}
+.lede{color:var(--muted)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tabs button,.chan button{font:500 14px var(--body);padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg);font-weight:600}
+.chan{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chan button{padding:6px 12px;font-size:13px}
+.chan button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--line-strong);color:var(--ink);font-weight:600}
+button:focus-visible{outline:3px solid var(--ebx-pessoas);outline-offset:2px}
+.stage{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:20px;align-items:start}
+@media (max-width:760px){.stage{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.who{display:flex;flex-direction:column;gap:14px}
+.role{font-size:13px;color:var(--muted)}
+.who ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:var(--accent-soft);color:var(--ink)}
+.chip.alt{background:var(--signal-soft);color:var(--signal)}
+.device{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.bar{display:flex;justify-content:space-between;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600}
+.bar span:last-child{color:var(--muted);font-weight:400}
+.screen{padding:14px;display:flex;flex-direction:column;gap:10px;min-height:340px}
+.msg{max-width:86%;padding:9px 12px;border-radius:12px;background:var(--agent-soft);border-left:3px solid var(--ebx-hrbp);font-size:15px}
+.msg.me{align-self:flex-end;background:var(--user);border-left:0}
+.replies{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.replies button,.act{font:500 14px var(--body);text-align:left;padding:9px 12px;border-radius:8px;border:1px solid var(--line-strong);background:var(--panel);color:var(--ink);cursor:pointer}
+.act.solid{background:var(--ink);color:var(--bg);border-color:transparent;text-align:center;font-weight:600}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row:last-child{border-bottom:0}
+.row small{display:block;color:var(--muted)}
+.pill{flex:none;font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--accent-soft);color:var(--ink)}
+.pill.warn{background:var(--signal-soft);color:var(--signal)}
+.meter{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:4px}
+.meter i{display:block;height:100%;background:var(--ebx-insights)}
+.note{font-size:13px;color:var(--muted)}
+.big{font:700 26px/1 var(--display);font-variant-numeric:tabular-nums}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{border:1px solid var(--line);border-radius:10px;padding:10px}
+.week{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;font-size:12px}
+.day{border:1px solid var(--line);border-radius:8px;padding:6px;min-height:120px;display:flex;flex-direction:column;gap:4px}
+.day b{font-size:12px;color:var(--muted)}
+.ev{border-radius:6px;padding:4px 5px;background:var(--line)}
+.ev.new{background:var(--signal-soft);color:var(--signal);border:1px dashed var(--signal)}
+.ev.ok{background:var(--agent-soft);color:var(--ink);border:1px solid var(--ebx-hrbp)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{font-size:12px;color:var(--muted);font-weight:600}
+td .pill{display:inline-block}
+.sample{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="brand"><span class="logo">EBX</span><span>Raio-X</span></div>
+  <h1>Personas e canais do Raio-X</h1>
+  <p class="lede">Cinco pessoas tocam o sistema, cada uma no canal em que já trabalha. Escolha uma persona e use o protótipo do canal dela. Todos os dados são exemplos simulados.</p>
+</header>
+
+<section aria-label="Personas">
+  <div class="tabs" id="tabs" role="tablist"></div>
+</section>
+
+<section class="stage">
+  <div class="card who" id="who"></div>
+  <div>
+    <div class="chan" id="chan"></div>
+    <div class="device">
+      <div class="bar"><span id="barL"></span><span id="barR"></span></div>
+      <div class="screen" id="screen"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Quem usa qual canal</h2>
+  <div class="card scroll">
+    <table>
+      <thead><tr><th>Persona</th><th>Link de entrevista</th><th>E-mail</th><th>WhatsApp ou Teams</th><th>Agenda</th><th>Portal web</th><th>Console EBX</th></tr></thead>
+      <tbody id="matrix"></tbody>
+    </table>
+  </div>
+  <p class="note" style="margin-top:10px">Além das pessoas, três canais só de entrada alimentam o sistema sem ninguém digitar: o assistente de reunião (transcrições), os conectores de folha, ponto e recrutamento (MCP) e os uploads. Quem conecta tudo uma vez é TI ou o departamento pessoal.</p>
+</section>
+</main>
+
+<script>
+var P = [
+  {id:'ceo', nome:'CEO ou diretor-geral', papel:'Paga a conta e define as metas',
+   quer:['Saber o que o RH está movendo nas metas','Gastar poucos minutos por mês'],
+   evita:['Entrar em mais um sistema','Indicador de RH sem ligação com o negócio'],
+   canais:[['Link de entrevista','p'],['E-mail','p']],
+   telas:[{k:'chat', nome:'Entrevista por link', L:'Entrevista do trimestre', R:'link, sem login', roteiro:'ceo'},
+          {k:'email', nome:'Relatório mensal', L:'E-mail · Relatório de novembro', R:'1 min de leitura'}]},
+  {id:'lider', nome:'Líder de RH', papel:'Responde pelo plano da área inteira',
+   quer:['Ver se o time está nas prioridades certas','Mostrar à diretoria o valor do RH'],
+   evita:['Consolidar planilhas à mão','Descobrir tarde que uma ação não deu retorno'],
+   canais:[['Portal web','p'],['E-mail','a'],['WhatsApp ou Teams','a']],
+   telas:[{k:'portal', nome:'Portal web', L:'Plano do RH · 4º trimestre', R:'portal web'}]},
+  {id:'bp', nome:'BP ou analista de RH', papel:'Executa as ações no dia a dia',
+   quer:['Saber o que fazer primeiro nesta semana','Parar o que não gera resultado'],
+   evita:['Preencher relatório de atividades','Abrir um portal todo dia'],
+   canais:[['WhatsApp ou Teams','p'],['Agenda','p'],['Portal web','a']],
+   telas:[{k:'chat', nome:'Check-in semanal', L:'Raio-X · check-in de segunda', R:'WhatsApp ou Teams', roteiro:'bp'},
+          {k:'agenda', nome:'Agenda', L:'Agenda da semana', R:'Google ou Outlook'}]},
+  {id:'gestor', nome:'Gestor de área', papel:'Lidera vendas, produção ou operações',
+   quer:['Resolver a trava do time dele','Ser ouvido sem reunião extra'],
+   evita:['Pesquisa longa','Pedido de RH sem retorno'],
+   canais:[['WhatsApp ou Teams','p'],['E-mail','a']],
+   telas:[{k:'chat', nome:'Pergunta pós-reunião', L:'Raio-X · após a reunião de terça', R:'Teams', roteiro:'gestor'}]},
+  {id:'ebx', nome:'Consultora EBX', papel:'Kelly e Larissa nos bastidores',
+   quer:['Garantir a qualidade de cada diagnóstico','Transformar a metodologia em regra do sistema'],
+   evita:['Refazer a mesma análise para cada cliente'],
+   canais:[['Console EBX','p']],
+   telas:[{k:'console', nome:'Console de revisão', L:'Fila de revisão', R:'console EBX'}]}
+];
+var R = {
+  ceo:{passos:[
+    ['Bom dia. São 4 perguntas sobre o trimestre. Qual é a meta número 1 do negócio?',['Crescer 20% em receita','Subir a margem em 3 pontos','Abrir a nova fábrica']],
+    ['O que mais ameaça essa meta hoje?',['Falta de gente pronta','Custo acima do previsto','Liderança sobrecarregada']],
+    ['Se o RH resolvesse uma coisa em 90 dias, qual seria?',['Vendedores produzindo mais rápido','Menos hora extra','Contratar para a nova unidade']],
+    ['Como você vai saber que deu certo?',['Receita por vendedor','Margem mensal','Vagas críticas preenchidas']]],
+    fim:'Obrigado. Em 30 dias chega o primeiro relatório por e-mail, com o que o RH priorizou para essa meta.'},
+  bp:{passos:[
+    ['Check-in de segunda. O onboarding comercial avançou?',['Sim, está no prazo','Travou','Ainda não comecei']],
+    ['Vi 9 horas da sua agenda no roadshow de cultura. Isso segue prioritário?',['Posso reduzir','Foi pedido da diretoria','Não sei dizer']],
+    ['Quer que eu reserve terça e quinta de manhã para o onboarding?',['Reserve','Só terça','Agora não']]],
+    fim:'Combinado. Atualizei seu plano e a liderança de RH vê isso no resumo de sexta.'},
+  gestor:{passos:[
+    ['Na reunião de terça você disse que vendedor novo demora a fechar a primeira venda. Qual é a principal trava?',['Não conhecem o produto','Carteira fraca','Falta acompanhamento']],
+    ['Quanto tempo um vendedor novo leva hoje até a primeira venda?',['Até 2 meses','De 3 a 4 meses','Mais de 4 meses']]],
+    fim:'Registrado. O RH volta até sexta com uma proposta para o seu time.'}
+};
+var M = [
+  ['CEO ou diretor-geral','p','p','','','',''],
+  ['Líder de RH','','a','a','','p',''],
+  ['BP ou analista de RH','','','p','p','a',''],
+  ['Gestor de área','','a','p','','',''],
+  ['Consultora EBX','','','','','','p']
+];
+var st = {p:0, t:0, chat:[], passo:0, aprovado:false, bloco:false, decisao:'', fila:[0,0,0]};
+
+function $(id){return document.getElementById(id)}
+function h(tag, cls, txt){var e=document.createElement(tag); if(cls){e.className=cls} if(txt!==undefined){e.textContent=txt} return e}
+function btn(txt, cls, fn){var b=h('button', cls, txt); b.type='button'; b.onclick=fn; return b}
+
+function tabs(){
+  var box=$('tabs'); box.textContent='';
+  P.forEach(function(p,i){
+    var b=btn(p.nome,'',function(){st.p=i; st.t=0; reset(); draw()});
+    b.setAttribute('role','tab'); b.setAttribute('aria-selected', i===st.p?'true':'false'); box.appendChild(b);
+  });
+}
+function reset(){st.chat=[]; st.passo=0}
+function who(){
+  var p=P[st.p], box=$('who'); box.textContent='';
+  var top=h('div'); top.appendChild(h('h2','',p.nome)); top.appendChild(h('div','role',p.papel)); box.appendChild(top);
+  [['O que quer',p.quer],['O que evita',p.evita]].forEach(function(g){
+    var d=h('div'); d.appendChild(h('h3','',g[0])); var ul=h('ul'); g[1].forEach(function(x){ul.appendChild(h('li','',x))}); d.appendChild(ul); box.appendChild(d);
+  });
+  var d=h('div'); d.appendChild(h('h3','','Canais')); var c=h('div','chips');
+  p.canais.forEach(function(x){c.appendChild(h('span', x[1]==='p'?'chip':'chip alt', x[0]+(x[1]==='p'?'':' · apoio')))});
+  d.appendChild(c); box.appendChild(d);
+}
+function chan(){
+  var p=P[st.p], box=$('chan'); box.textContent='';
+  if(p.telas.length<2){return}
+  p.telas.forEach(function(t,i){
+    var b=btn(t.nome,'',function(){st.t=i; reset(); draw()}); b.setAttribute('aria-pressed', i===st.t?'true':'false'); box.appendChild(b);
+  });
+}
+function chat(s, r){
+  var passos=R[r].passos;
+  st.chat.forEach(function(m){s.appendChild(h('div', m[0]?'msg me':'msg', m[1]))});
+  if(st.passo<passos.length){
+    s.appendChild(h('div','msg',passos[st.passo][0]));
+    var q=h('div','replies');
+    passos[st.passo][1].forEach(function(o){q.appendChild(btn(o,'',function(){
+      st.chat.push([0,passos[st.passo][0]]); st.chat.push([1,o]); st.passo++; draw();
+    }))});
+    s.appendChild(q);
+  } else {
+    s.appendChild(h('div','msg',R[r].fim));
+    s.appendChild(btn('Recomeçar','act',function(){reset(); draw()}));
+  }
+}
+function row(s, a, b, pill, warn){
+  var r=h('div','row'), l=h('div'); l.appendChild(document.createTextNode(a)); if(b){l.appendChild(h('small','',b))}
+  r.appendChild(l); if(pill){r.appendChild(h('span', warn?'pill warn':'pill', pill))} s.appendChild(r); return r;
+}
+function meter(s, label, pct){
+  var d=h('div'); d.appendChild(h('div','note',label+' · '+pct+'%')); var m=h('div','meter'), i=h('i'); i.style.width=pct+'%'; m.appendChild(i); d.appendChild(m); s.appendChild(d);
+}
+function email(s){
+  s.appendChild(h('h3','','Meta do trimestre: crescer 20% em receita'));
+  var duo=h('div','duo');
+  [['71%','do tempo do RH em ações ligadas à meta (era 38%)'],['3,1 meses','até a primeira venda de um vendedor novo (era 4,0)']].forEach(function(x){
+    var t=h('div','tile'); t.appendChild(h('div','big',x[0])); t.appendChild(h('div','note',x[1])); duo.appendChild(t);
+  });
+  s.appendChild(duo);
+  s.appendChild(h('p','note','Os números mostram contribuição provável, não prova de causa.'));
+  s.appendChild(h('h3','','Uma decisão para você'));
+  if(st.decisao){
+    s.appendChild(h('div','msg','Resposta registrada: '+st.decisao+'. O plano do RH já foi ajustado.'));
+    s.appendChild(btn('Mudar resposta','act',function(){st.decisao=''; draw()}));
+  } else {
+    s.appendChild(h('p','','O roadshow de cultura em 6 unidades está suspenso. Mantemos assim?'));
+    var q=h('div','replies');
+    ['Manter suspenso','Retomar em janeiro'].forEach(function(o){q.appendChild(btn(o,'',function(){st.decisao=o; draw()}))});
+    s.appendChild(q);
+  }
+}
+function portal(s){
+  s.appendChild(h('h3','','Prioridades ligadas a metas'));
+  row(s,'Onboarding comercial de 30 dias','Meta: receita · dono: BP comercial','No prazo');
+  row(s,'Preparar os 3 supervisores de vendas','Meta: receita · dono: treinamento','Atrasada',true);
+  row(s,'Roadshow de cultura','Sem meta ligada · sugestão: parar','Parar?',true);
+  s.appendChild(h('h3','','Tempo do time em ações com meta'));
+  meter(s,'Business partners',74); meter(s,'Treinamento',58); meter(s,'Recrutamento',81);
+  s.appendChild(btn(st.aprovado?'Plano aprovado. Desfazer':'Aprovar plano da semana','act solid',function(){st.aprovado=!st.aprovado; draw()}));
+  if(st.aprovado){s.appendChild(h('p','note','O time recebe as prioridades no check-in de segunda.'))}
+}
+function agenda(s){
+  var dias=[['Seg',['Check-in Raio-X','Roadshow: unidade 2']],['Ter',[]],['Qua',['Comitê de pessoas','Roadshow: unidade 3']],['Qui',[]],['Sex',['Resumo da semana']]];
+  var w=h('div','week');
+  dias.forEach(function(d){
+    var c=h('div','day'); c.appendChild(h('b','',d[0]));
+    d[1].forEach(function(e){c.appendChild(h('div','ev',e))});
+    if(d[0]==='Ter'||d[0]==='Qui'){c.appendChild(h('div', st.bloco?'ev ok':'ev new', st.bloco?'Onboarding comercial':'Sugerido: onboarding comercial'))}
+    w.appendChild(c);
+  });
+  s.appendChild(w);
+  s.appendChild(h('p','note', st.bloco?'Duas manhãs reservadas para a prioridade número 1.':'O Raio-X sugere reservar duas manhãs para a prioridade número 1. Nada entra na agenda sem o seu aceite.'));
+  s.appendChild(btn(st.bloco?'Remover reserva':'Aceitar reserva','act solid',function(){st.bloco=!st.bloco; draw()}));
+}
+function consoleEbx(s){
+  var itens=[['Chocalhos Brasil · causa do turnover comercial','Confiança 75% · 4 fontes'],['Chocalhos Brasil · sugestão de parar o roadshow','Confiança 60% · 2 fontes'],['Rede Aurora · hora extra no turno da noite','Confiança 40% · falta relatório de ponto']];
+  s.appendChild(h('h3','','Diagnósticos aguardando revisão'));
+  itens.forEach(function(it,i){
+    var r=row(s,it[0],it[1], st.fila[i]===1?'Aprovado':(st.fila[i]===2?'Em ajuste':'Pendente'), st.fila[i]!==1);
+    var q=h('div','replies'); q.style.flexDirection='row'; q.style.margin='0';
+    q.appendChild(btn('Aprovar','',function(){st.fila[i]=1; draw()})); q.appendChild(btn('Ajustar','',function(){st.fila[i]=2; draw()}));
+    r.appendChild(q); r.style.flexWrap='wrap';
+  });
+  s.appendChild(h('p','note','Cada ajuste vira regra no mapa de meta, alavanca e ação. Com o tempo, menos diagnósticos passam pela fila.'));
+}
+function screen(){
+  var t=P[st.p].telas[st.t], s=$('screen'); s.textContent='';
+  $('barL').textContent=t.L; $('barR').textContent=t.R;
+  if(t.k==='chat'){chat(s,t.roteiro)}
+  if(t.k==='email'){email(s)}
+  if(t.k==='portal'){portal(s)}
+  if(t.k==='agenda'){agenda(s)}
+  if(t.k==='console'){consoleEbx(s)}
+}
+function matrix(){
+  var tb=$('matrix'); tb.textContent='';
+  M.forEach(function(r){
+    var tr=h('tr'); tr.appendChild(h('td','',r[0]));
+    for(var i=1;i<r.length;i++){var td=h('td'); if(r[i]){td.appendChild(h('span', r[i]==='p'?'pill':'pill warn', r[i]==='p'?'Principal':'Apoio'))} tr.appendChild(td)}
+    tb.appendChild(tr);
+  });
+}
+function draw(){tabs(); who(); chan(); screen()}
+matrix(); draw();
+</script>
+</body>
+</html>
