@@ -4,6 +4,6 @@
   "private": true,
   "description": "Protótipos navegáveis do EBX Raio-X: um canal por persona, com estado compartilhado em um servidor local.",
   "type": "module",
-  "scripts": { "start": "node server.mjs" },
+  "scripts": { "start": "node server.mjs", "test": "node scripts/teste-fluxo.cjs" },
   "engines": { "node": ">=18" }
 }
