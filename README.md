@@ -74,11 +74,21 @@ shared/store.js       estado compartilhado e sincronização
 shared/ui.js          peças de interface comuns
 shared/ebx.css        identidade visual do ERP EBX
 exemplos/             CSV e transcrição para testar os envios
+scripts/              teste de fluxo (npm test)
+docs/                 contexto do produto, decisões, backlog e roteiro de demo
 ```
 
-## Próximos passos sugeridos
+## Testar
 
-1. Trocar o mapa provisório pelo mapa real da EBX em `shared/metodologia.js`.
-2. Ligar um modelo de linguagem ao diagnóstico e à leitura de transcrições, mantendo a revisão no console.
-3. Trocar o e-mail simulado por envio real e o relógio por um agendador.
-4. Acrescentar login por empresa antes de qualquer dado real.
+```bash
+npm test
+```
+
+Percorre o ciclo inteiro por todas as aplicações com um navegador simulado e falha se alguma tela quebrar.
+
+## Contexto para evoluir
+
+- [docs/contexto-produto.md](docs/contexto-produto.md): o problema, a ideia, personas, canais e o parecer de viabilidade.
+- [docs/decisoes.md](docs/decisoes.md): o que já foi decidido e por quê.
+- [docs/backlog.md](docs/backlog.md): próximas evoluções e dívidas conhecidas.
+- [CLAUDE.md](CLAUDE.md): convenções do código, lidas automaticamente pelo Claude Code.
