@@ -1,0 +1,84 @@
+# EBX Raio-X: protótipos navegáveis
+
+Demonstração local do Raio-X, o produto que liga as metas do negócio ao trabalho do RH. Cada canal é uma aplicação separada e todas compartilham o mesmo estado: o que uma persona faz aparece nas outras na hora.
+
+O objetivo é tornar a ideia palpável para aferir a viabilidade. Não é o produto: veja [o que é real e o que é simulado](#o-que-é-real-e-o-que-é-simulado).
+
+## Rodar
+
+Precisa só de Node 18 ou mais recente. Não há dependências para instalar.
+
+```bash
+node server.mjs
+```
+
+Abra `http://localhost:4173`. O terminal também mostra o endereço para abrir no celular, na mesma rede. Para usar outra porta: `PORT=8080 node server.mjs`.
+
+O estado fica em `data/state.json` (fora do Git). O botão "Zerar a demo" no painel recomeça tudo.
+
+## Aplicações e canais
+
+| Persona | Canal | Aplicação | Endereço |
+| --- | --- | --- | --- |
+| Todos | Painel da demo e relógio simulado | `apps/hub` | `/` |
+| Todos | E-mail simulado, com caixa de entrada por persona | `apps/email` | `/email/?de=ceo` |
+| CEO | Entrevista de metas por link, sem login | `apps/entrevista` | `/entrevista/` |
+| CEO | Relatório mensal com uma decisão | `apps/relatorio` | `/relatorio/` |
+| Líder de RH | Portal web: dados, raio-X, plano e time | `apps/portal` | `/portal/` |
+| BP de RH | Check-in semanal por link | `apps/checkin` | `/checkin/` |
+| Gestor de área | Três perguntas por link | `apps/gestor` | `/gestor/` |
+| BP e gestor | WhatsApp ou Teams simulado (versão 1) | `apps/mensagens` | `/mensagens/?de=bp` |
+| Consultora EBX | Console de revisão e mapa EBX | `apps/console` | `/console/` |
+
+No piloto, CEO, BP e gestor recebem um e-mail curto com um link. A aplicação `mensagens` mostra o mesmo fluxo dentro de uma conversa, que é o canal previsto para a versão 1.
+
+## Roteiro de demonstração
+
+O passo a passo, com o que falar em cada tela, está em [docs/roteiro-demo.md](docs/roteiro-demo.md). Em resumo:
+
+1. CEO abre o e-mail e responde a entrevista.
+2. Líder de RH envia a base de pessoas pelo portal; gestor responde as perguntas; BP encaminha uma transcrição.
+3. Consultora EBX revisa e libera o diagnóstico no console.
+4. Líder de RH aprova o plano; BP faz o check-in da semana.
+5. No painel, feche o mês; o CEO recebe o relatório e decide.
+
+Para pular a coleta, use "Preencher as fases 1 e 2 com o exemplo" no painel.
+
+## O que é real e o que é simulado
+
+Funciona de verdade:
+
+- Leitura de CSV (`area;admissao;desligamento;horas_extras`) e cálculo de turnover, hora extra e tempo de casa por área.
+- Diagnóstico a partir do mapa meta, alavanca, indicador e ação, com evidências e grau de confiança.
+- Classificação das iniciativas do RH em fazer, parar, delegar e manter.
+- Estado único entre as aplicações, com atualização ao vivo entre abas e aparelhos.
+
+Está simulado:
+
+- **Inteligência.** O motor usa regras e palavras-chave (`shared/motor.js`). No produto, um modelo de linguagem lê arquivos e transcrições e usa o mesmo mapa.
+- **Envio de mensagens.** Nenhum e-mail, WhatsApp ou Teams é enviado. As mensagens aparecem nas aplicações `email` e `mensagens`.
+- **Agendador.** O check-in semanal e o relatório mensal são disparados pelos botões do painel.
+- **Acesso.** Não há login nem separação por empresa.
+- **Mapa EBX.** O conteúdo de `shared/metodologia.js` é provisório.
+
+## Estrutura
+
+```
+server.mjs            servidor local: arquivos, estado e aviso às telas abertas
+apps/<nome>/          uma aplicação por canal (index.html + app.js)
+shared/metodologia.js mapa EBX: é aqui que a metodologia real entra
+shared/motor.js       diagnóstico e classificação das iniciativas
+shared/dados.js       base de exemplo, leitura de CSV e indicadores
+shared/fluxo.js       quem recebe qual mensagem, e quando
+shared/store.js       estado compartilhado e sincronização
+shared/ui.js          peças de interface comuns
+shared/ebx.css        identidade visual do ERP EBX
+exemplos/             CSV e transcrição para testar os envios
+```
+
+## Próximos passos sugeridos
+
+1. Trocar o mapa provisório pelo mapa real da EBX em `shared/metodologia.js`.
+2. Ligar um modelo de linguagem ao diagnóstico e à leitura de transcrições, mantendo a revisão no console.
+3. Trocar o e-mail simulado por envio real e o relógio por um agendador.
+4. Acrescentar login por empresa antes de qualquer dado real.
