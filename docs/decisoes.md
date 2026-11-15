@@ -4,6 +4,7 @@ Uma linha por decisão, da mais recente para a mais antiga. Ao mudar uma decisã
 
 | Data | Decisão | Motivo |
 | --- | --- | --- |
+| 2026-11-15 | A demo fica publicada no Render, plano gratuito, a partir de `main`, sem disco persistente | Mostrar a demo por link, sem instalar nada; o estado pode zerar a cada reinício porque os dados são fictícios |
 | 2026-11-15 | O contexto do projeto fica no repositório: `CLAUDE.md` para instruções e `docs/` para produto, decisões e backlog | Sessões futuras começam sem a conversa original |
 | 2026-11-15 | Há um teste de fluxo (`npm test`) com navegador simulado, sem dependências | Verificar o ciclo inteiro depois de cada mudança |
 | 2026-11-15 | Um canal por aplicação, em `apps/`, com estado único em um servidor Node sem dependências | Demonstrar localmente, em várias abas e aparelhos, sem instalação |

@@ -16,6 +16,10 @@ Abra `http://localhost:4173`. O terminal também mostra o endereço para abrir n
 
 O estado fica em `data/state.json` (fora do Git). O botão "Zerar a demo" no painel recomeça tudo.
 
+## Na internet (Render)
+
+A demo também fica em <https://ebx-raiox.onrender.com>, um serviço web do Render (`npm install`, `node server.mjs`) que publica de novo a cada commit em `main`. O plano é o gratuito: o serviço dorme depois de 15 minutos sem acesso (a primeira abertura leva perto de um minuto) e o estado volta ao zero quando ele reinicia. O endereço é público e não tem login, então use só dados fictícios.
+
 ## Aplicações e canais
 
 | Persona | Canal | Aplicação | Endereço |

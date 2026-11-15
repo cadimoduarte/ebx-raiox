@@ -19,6 +19,8 @@ function gravar() { fs.mkdirSync(path.dirname(ARQ), { recursive: true }); fs.wri
 function avisar() { for (const r of telas) { r.write(`data: ${estado.rev}\n\n`); } }
 function json(res, obj, status = 200) { res.writeHead(status, { 'content-type': TIPOS['.json'], 'cache-control': 'no-store' }); res.end(JSON.stringify(obj)); }
 function enderecos() {
+  // Publicado no Render, o endereço é o público; não há "mesma rede" para mostrar.
+  if (process.env.RENDER_EXTERNAL_URL) { return [process.env.RENDER_EXTERNAL_URL]; }
   const lista = [`http://localhost:${PORT}`];
   for (const redes of Object.values(os.networkInterfaces())) { for (const r of redes || []) { if (r.family === 'IPv4' && !r.internal) { lista.push(`http://${r.address}:${PORT}`); } } }
   return lista;
