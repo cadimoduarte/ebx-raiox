@@ -18,7 +18,7 @@ O estado fica em `data/state.json` (fora do Git). O botão "Zerar a demo" no pai
 
 ## Na internet (Render)
 
-A demo também fica em <https://ebx-raiox.onrender.com>, um serviço web do Render (`npm install`, `node server.mjs`) que publica de novo a cada commit em `main`. O plano é o gratuito: o serviço dorme depois de 15 minutos sem acesso (a primeira abertura leva perto de um minuto) e o estado volta ao zero quando ele reinicia. O endereço é público e não tem login, então use só dados fictícios.
+A demo também fica em <https://ebx-raiox.onrender.com>, um serviço web do Render (`npm install`, `node server.mjs`) que publica de novo a cada commit em `main`. O plano é o gratuito: o serviço dorme depois de 15 minutos sem acesso (a primeira abertura leva perto de um minuto) e o estado volta ao zero quando ele reinicia. O endereço é público e a entrada é uma credencial única e simples, então use só dados fictícios.
 
 ## Aplicações e canais
 
@@ -26,6 +26,7 @@ A demo também fica em <https://ebx-raiox.onrender.com>, um serviço web do Rend
 | --- | --- | --- | --- |
 | Todos | Painel da demo e relógio simulado | `apps/hub` | `/` |
 | Todos | E-mail simulado, com caixa de entrada por persona | `apps/email` | `/email/?de=ceo` |
+| Todos | Tela de entrada da demo | `apps/login` | `/login/` |
 | CEO | Entrevista de metas por link, sem login | `apps/entrevista` | `/entrevista/` |
 | CEO | Relatório mensal com uma decisão | `apps/relatorio` | `/relatorio/` |
 | Líder de RH | Portal web: dados, raio-X, plano e time | `apps/portal` | `/portal/` |
@@ -62,13 +63,13 @@ Está simulado:
 - **Inteligência.** O motor usa regras e palavras-chave (`shared/motor.js`). No produto, um modelo de linguagem lê arquivos e transcrições e usa o mesmo mapa.
 - **Envio de mensagens.** Nenhum e-mail, WhatsApp ou Teams é enviado. As mensagens aparecem nas aplicações `email` e `mensagens`.
 - **Agendador.** O check-in semanal e o relatório mensal são disparados pelos botões do painel.
-- **Acesso.** Não há login nem separação por empresa.
+- **Acesso.** Há uma tela de entrada (`/login/`) com uma credencial fixa, igual para todos, conferida no servidor. Não há usuários, perfis nem separação por empresa; os links "sem login" do CEO, do BP e do gestor abrem depois dessa entrada.
 - **Mapa EBX.** O conteúdo de `shared/metodologia.js` é provisório.
 
 ## Estrutura
 
 ```
-server.mjs            servidor local: arquivos, estado e aviso às telas abertas
+server.mjs            servidor local: arquivos, estado, entrada e aviso às telas abertas
 apps/<nome>/          uma aplicação por canal (index.html + app.js)
 shared/metodologia.js mapa EBX: é aqui que a metodologia real entra
 shared/motor.js       diagnóstico e classificação das iniciativas

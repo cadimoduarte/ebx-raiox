@@ -12,7 +12,7 @@ Antes de mudar algo relevante, leia `docs/contexto-produto.md` (o porquê), `doc
 
 ## Como o código está organizado
 
-- `server.mjs`: serve arquivos, guarda o estado único em `data/state.json` e avisa as telas por SSE (`/api/events`).
+- `server.mjs`: serve arquivos, guarda o estado único em `data/state.json` e avisa as telas por SSE (`/api/events`). Tudo, menos `apps/login`, exige a sessão criada em `/api/login`; a credencial fica só no servidor, como resumo, e nunca em `apps/`, `shared/` ou `docs/`, que são servidos ao navegador.
 - `apps/<nome>/`: uma aplicação por canal, com `index.html` e `app.js`. O servidor mapeia `/<nome>/` para a pasta; `/` abre `apps/hub`.
 - `shared/`: tudo o que as aplicações compartilham, exposto no objeto global `RX`.
   - `metodologia.js`: o mapa EBX (meta, alavanca, indicador, ação). Conteúdo provisório.
