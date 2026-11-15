@@ -6,13 +6,19 @@ window.RX = window.RX || {};
   function novo() { return JSON.parse(JSON.stringify(VAZIO)); }
   function digitando() { var a = document.activeElement; return !!a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.type !== 'file'; }
   function mostrar() { pendente = false; if (cb) { cb(S); } }
+  // Sessão vencida (ou servidor reiniciado): volta ao login e retorna para esta tela depois.
+  async function pedir(url, opc) {
+    var r = await fetch(url, opc);
+    if (r.status === 401) { location.href = '/login/?ir=' + encodeURIComponent(location.pathname + location.search); throw new Error('sem sessão'); }
+    return r.json();
+  }
   async function ler() {
-    var j = await (await fetch('/api/state')).json();
+    var j = await pedir('/api/state');
     rev = j.rev; S = Object.assign(novo(), j.dados || {}); RX.fluxo(S); return S;
   }
   async function mudar(fn) {
     await ler(); fn(S); RX.fluxo(S);
-    var j = await (await fetch('/api/state', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ dados: S }) })).json();
+    var j = await pedir('/api/state', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ dados: S }) });
     rev = j.rev; mostrar();
   }
   async function iniciar(desenhar) {

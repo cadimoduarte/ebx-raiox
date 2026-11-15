@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar · EBX Raio-X</title>
+<link rel="stylesheet" href="/shared/ebx.css">
+<script src="/shared/tema.js"></script>
+</head>
+<body>
+<header class="top"><div class="top-in"><span class="brand"><span class="logo">EBX</span><span>Raio-X</span></span></div></header>
+<main class="wrap narrow">
+  <form class="card" id="entrar">
+    <h1>Entrar</h1>
+    <p class="muted">Acesso restrito à demonstração.</p>
+    <label>E-mail<input type="email" id="email" autocomplete="username" required autofocus></label>
+    <label>Senha<input type="password" id="senha" autocomplete="current-password" required></label>
+    <p class="say" id="erro" role="alert" hidden></p>
+    <div class="btns"><button class="btn primary" type="submit" id="botao">Entrar</button></div>
+  </form>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
