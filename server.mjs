@@ -24,8 +24,7 @@ function enderecos() {
   return lista;
 }
 function arquivo(urlPath) {
-  let p = decodeURIComponent(urlPath.split('?')[0]);
-  if (p === '/') { p = '/hub/'; }
+  const p = decodeURIComponent(urlPath.split('?')[0]);
   const partes = p.split('/').filter(Boolean);
   const raiz = ['shared', 'exemplos', 'docs'].includes(partes[0]) ? DIR : path.join(DIR, 'apps');
   let alvo = path.normalize(path.join(raiz, ...partes));
@@ -51,6 +50,8 @@ http.createServer((req, res) => {
     res.writeHead(200, { 'content-type': 'text/event-stream', 'cache-control': 'no-store', connection: 'keep-alive' });
     res.write(`data: ${estado.rev}\n\n`); telas.add(res); req.on('close', () => telas.delete(res)); return;
   }
+  // A raiz leva ao painel pelo endereço dele, para que o app.js relativo do hub carregue.
+  if (rota === '/') { res.writeHead(302, { location: '/hub/' + req.url.slice(1) }); return res.end(); }
   const alvo = arquivo(req.url);
   if (!alvo || !fs.existsSync(alvo)) { res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' }); return res.end('Não encontrado'); }
   if (!rota.endsWith('/') && alvo.endsWith(path.join(path.basename(path.dirname(alvo)), 'index.html')) && !rota.endsWith('.html')) { res.writeHead(302, { location: rota + '/' }); return res.end(); }

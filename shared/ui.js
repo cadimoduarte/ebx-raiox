@@ -12,8 +12,8 @@ window.RX = window.RX || {};
   function trava(titulo, txt) { return '<section class="card lock">' + cab(titulo, tag('Aguardando', 'warn')) + '<p class="muted">' + esc(txt) + '</p></section>'; }
   function metaTxt(S) { return S.meta ? MT.metas[S.meta.tipo].nome + (S.meta.alvo ? ' · alvo ' + S.meta.alvo : '') + ' · ' + S.meta.prazo : ''; }
   function topo(persona, canal) {
-    document.getElementById('topo').innerHTML = '<header class="top"><div class="top-in"><a class="brand" href="/"><span class="logo">EBX</span><span>Raio-X</span></a>' +
-      '<span class="who">' + (persona ? esc(persona) + ' · ' : '') + esc(canal) + '</span><span style="flex:1"></span><nav><a href="/">Painel da demo</a></nav></div></header>';
+    document.getElementById('topo').innerHTML = '<header class="top"><div class="top-in"><a class="brand" href="/hub/"><span class="logo">EBX</span><span>Raio-X</span></a>' +
+      '<span class="who">' + (persona ? esc(persona) + ' · ' : '') + esc(canal) + '</span><span style="flex:1"></span><nav><a href="/hub/">Painel da demo</a></nav></div></header>';
   }
   function diag(S, d) {
     if (!d.causas.length) { return '<p class="say">Com os dados enviados, nenhuma alavanca do mapa passou do limite para a meta escolhida. Envie mais fontes ou revise os limites no mapa EBX.</p>'; }
@@ -29,7 +29,7 @@ window.RX = window.RX || {};
       { n: 'Dados', quem: MOTOR.fontes(S) + ' de 5 fontes', ok: !!S.dados, href: '/email/?de=rh', falta: 'O líder de RH envia a base de pessoas pelo portal' },
       { n: 'Raio-X', quem: 'Motor e EBX', ok: S.rev.st === 'aprovado', href: '/console/', falta: 'A EBX revisa o diagnóstico no console' },
       { n: 'Plano e rotina', quem: 'RH e BP', ok: S.plano.ok && feito, href: S.plano.ok ? '/email/?de=bp' : '/portal/#plano', falta: S.plano.ok ? 'O BP faz o check-in da semana' : 'O líder de RH aprova o plano' },
-      { n: 'Resultado', quem: 'CEO', ok: !!S.dec, href: S.mes ? '/email/?de=ceo' : '/', falta: S.mes ? 'O CEO lê o relatório e decide' : 'Feche o mês no painel para enviar o relatório' }
+      { n: 'Resultado', quem: 'CEO', ok: !!S.dec, href: S.mes ? '/email/?de=ceo' : '/hub/', falta: S.mes ? 'O CEO lê o relatório e decide' : 'Feche o mês no painel para enviar o relatório' }
     ];
   }
   function trilho(S) {
