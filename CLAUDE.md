@@ -21,6 +21,7 @@ Antes de mudar algo relevante, leia `docs/contexto-produto.md` (o porquê), `doc
   - `fluxo.js`: quais mensagens cada persona recebe, a partir do estado. Ids fixos, sem duplicar.
   - `store.js`: `RX.store.iniciar(desenhar)`, `mudar(fn)`, `redesenhar()`, `zerar()`.
   - `ui.js`: peças de interface (`RX.ui`).
+  - `tema.js`: tema claro ou escuro (`RX.tema`). Carrega no `<head>`; a escolha fica no `localStorage`, fora do estado.
   - `ebx.css`: identidade visual.
 
 ## Convenções

@@ -11,9 +11,18 @@ window.RX = window.RX || {};
   function cab(titulo, estado) { return '<div class="head"><h2>' + esc(titulo) + '</h2>' + (estado || '') + '</div>'; }
   function trava(titulo, txt) { return '<section class="card lock">' + cab(titulo, tag('Aguardando', 'warn')) + '<p class="muted">' + esc(txt) + '</p></section>'; }
   function metaTxt(S) { return S.meta ? MT.metas[S.meta.tipo].nome + (S.meta.alvo ? ' · alvo ' + S.meta.alvo : '') + ' · ' + S.meta.prazo : ''; }
+  // O botão diz para onde vai: no tema claro oferece o escuro, e o contrário.
+  function rotuloTema() { return RX.tema.atual() === 'dark' ? 'Tema claro' : 'Tema escuro'; }
+  function rotularTema() { var b = document.querySelector ? document.querySelector('[data-act="tema"]') : null; if (b) { b.textContent = rotuloTema(); } }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-act]') : null;
+    if (b && b.getAttribute('data-act') === 'tema') { RX.tema.alternar(); rotularTema(); }
+  });
+  // As outras abas da demo acompanham a troca.
+  window.addEventListener('storage', function (e) { if (e.key === RX.tema.CHAVE) { RX.tema.aplicar(e.newValue); rotularTema(); } });
   function topo(persona, canal) {
     document.getElementById('topo').innerHTML = '<header class="top"><div class="top-in"><a class="brand" href="/hub/"><span class="logo">EBX</span><span>Raio-X</span></a>' +
-      '<span class="who">' + (persona ? esc(persona) + ' · ' : '') + esc(canal) + '</span><span style="flex:1"></span><nav><a href="/hub/">Painel da demo</a></nav></div></header>';
+      '<span class="who">' + (persona ? esc(persona) + ' · ' : '') + esc(canal) + '</span><span style="flex:1"></span><button class="btn tema" type="button" data-act="tema">' + rotuloTema() + '</button><nav><a href="/hub/">Painel da demo</a></nav></div></header>';
   }
   function diag(S, d) {
     if (!d.causas.length) { return '<p class="say">Com os dados enviados, nenhuma alavanca do mapa passou do limite para a meta escolhida. Envie mais fontes ou revise os limites no mapa EBX.</p>'; }

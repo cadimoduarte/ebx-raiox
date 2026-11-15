@@ -28,6 +28,7 @@ a{color:inherit}
 .top-in{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-top:12px;padding-bottom:12px}
 .brand{display:flex;align-items:center;gap:8px;font-weight:700;text-decoration:none}
 .logo{background:var(--text);color:var(--bg);padding:2px 8px;border-radius:6px;letter-spacing:.08em}
+.btn.tema{font-size:13px;padding:6px 11px}
 nav{display:flex;flex-wrap:wrap;gap:6px}
 nav a{font-size:13px;text-decoration:none;padding:6px 11px;border-radius:8px;border:1px solid var(--line);background:var(--surface)}
 nav a[aria-current="page"]{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:600}

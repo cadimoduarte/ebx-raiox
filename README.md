@@ -72,6 +72,7 @@ shared/dados.js       base de exemplo, leitura de CSV e indicadores
 shared/fluxo.js       quem recebe qual mensagem, e quando
 shared/store.js       estado compartilhado e sincronização
 shared/ui.js          peças de interface comuns
+shared/tema.js        tema claro ou escuro, guardado no navegador
 shared/ebx.css        identidade visual do ERP EBX
 exemplos/             CSV e transcrição para testar os envios
 scripts/              teste de fluxo (npm test)

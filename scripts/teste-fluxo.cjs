@@ -10,7 +10,7 @@ function mk(app,search,hash){
    EventSource:function(){},URLSearchParams,setTimeout,console,Date,JSON,Object,Array,String,Math,isNaN,parseFloat,FileReader:function(){}};
   g.window=g;g.addEventListener=(t,f)=>H[t]=f;
   const vm=require('vm');const c=vm.createContext(g);
-  for(const f of['shared/metodologia.js','shared/dados.js','shared/motor.js','shared/fluxo.js','shared/store.js','shared/ui.js',`apps/${app}/app.js`])vm.runInContext(fs.readFileSync(f,'utf8'),c,{filename:f});
+  for(const f of['shared/tema.js','shared/metodologia.js','shared/dados.js','shared/motor.js','shared/fluxo.js','shared/store.js','shared/ui.js',`apps/${app}/app.js`])vm.runInContext(fs.readFileSync(f,'utf8'),c,{filename:f});
   ctx.g=g;ctx.act=async(a,v,extra)=>{H.click({target:{closest:()=>({disabled:false,getAttribute:k=>k==='data-act'?a:(extra&&extra[k])||v})}});await new Promise(r=>setTimeout(r,30))};
   ctx.html=()=>el('view').innerHTML;return ctx}
 const wait=()=>new Promise(r=>setTimeout(r,40));
