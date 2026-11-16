@@ -49,6 +49,8 @@ O passo a passo, com o que falar em cada tela, está em [docs/roteiro-demo.md](d
 
 Para pular a coleta, use "Preencher as fases 1 e 2 com o exemplo" no painel.
 
+Há um vídeo legendado do roteiro inteiro em `docs-extras/demo-raio-x.mp4` (cerca de 5 minutos e meio). Para regravar depois de mudar as telas, rode `node scripts/gravar-demo.cjs`; ele precisa do Playwright instalado na máquina e zera o estado da demo.
+
 ## O que é real e o que é simulado
 
 Funciona de verdade:
@@ -80,7 +82,7 @@ shared/ui.js          peças de interface comuns
 shared/tema.js        tema claro ou escuro, guardado no navegador
 shared/ebx.css        identidade visual do ERP EBX
 exemplos/             CSV e transcrição para testar os envios
-scripts/              teste de fluxo (npm test)
+scripts/              teste de fluxo (npm test) e gravação do vídeo da demo
 docs/                 contexto do produto, decisões, backlog e roteiro de demo
 ```
 
